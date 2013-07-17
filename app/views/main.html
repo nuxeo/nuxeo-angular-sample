@@ -1,0 +1,39 @@
+<section ng-show="document.type != 'Root'">
+  <div class="page-header">
+    <h2>{{document.title}}</h2>
+  </div>
+
+
+</section>
+
+<section>
+  <div class="page-header">
+    <h4>Content</h4>
+  </div>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>&nbsp;</th>
+        <th>Title</th>
+        <th>Modified</th>
+        <th>Last contributor</th>
+        <th>Version</th>
+        <th>State</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="entry in children">
+        <td><input type="checkbox"/></td>
+        <td><a ng-click="setPath(entry.path)">{{entry.title}}</td>
+        <td>{{entry.lastModified | date:'yyyy-MM-dd'}}</td>
+        <td></td>
+        <td>{{entry.versionLabel}}</td>
+        <td>{{entry.state}}</td>
+      </tr>
+    </tbody>
+
+    
+
+  </table>
+
+</section>
