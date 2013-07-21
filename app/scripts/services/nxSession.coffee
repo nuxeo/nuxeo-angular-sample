@@ -29,17 +29,11 @@ angular.module('nxSession',['ng'])
         angular.extend this,json
 
       save: ()->
-        doc = Session.getDocument(@id)
+        doc = new nxDocument(@value.id)
         self = @
-        $http.post(apiRootPath + doc.getResourceUrl() + "/@ba/" + @['entity-type'], @).then (response)->
+        $http.post(apiRootPath + doc.getResourceUrl() + "/@bo/" + @['entity-type'], @).then (response)->
           angular.extend self, response.data
           self
-
-
-
-
-
-
 
     class nxDocument
       constructor: (pathOrId, jsonDoc) ->
@@ -59,7 +53,7 @@ angular.module('nxSession',['ng'])
 
       getResourceUrl: ()->
         if @uid? then "/id/" + @uid else if(@_getPathOrId()[0] == "/")
-          "/path" + @pathOrId
+          "/path" + if @pathOrId == "/" then "" else @pathOrId
         else
           "/id/" + @pathOrId            
 
@@ -97,16 +91,8 @@ angular.module('nxSession',['ng'])
 
 
       getAdapter: (adapterName)->
-        $http.get(apiRootPath + @getResourceUrl() + "/@ba/"+adapterName).then (response)->
+        $http.get(apiRootPath + @getResourceUrl() + "/@bo/"+adapterName).then (response)->
           new nxAdapter(response.data)
-        
-
-
-
-        
-
-    
-
 
     Session.getDocument = (pathOrId)->
       new nxDocument(pathOrId)
@@ -114,16 +100,9 @@ angular.module('nxSession',['ng'])
     Session.createDocument = (parentPath, name, type)->
       $http.post(apiRootPath + "/path" + parentPath, {type: type, name: name}).then (response)->
         new nxDocument(response.data.uid, response.data)
-        
-
-
-
-
-
-
+  
     Session
 
-  nxSessionFactory
 ]
 
 

@@ -12,7 +12,7 @@ angular.module("nuxeoAngularSampleApp").controller "MainCtrl",
   $scope.setPath = (path)->
     $scope.path = path
 
-  $scope.path = "/default-domain"
+  $scope.path = "/"
 
   
 ]

@@ -143,27 +143,26 @@ describe "Service: nxSession >", ->
 
   describe "adapters >", ->
 
+    beforeEach ()->
+      $httpBackend.expectGET(apiRootPath + '/id/12345-6789/@bo/BusinessAdapter').respond 200, businessAdapter("12345-6789","Title")
+
     it "should be able ta get a business adapter", ()->    
-      $httpBackend.expectGET(apiRootPath + '/id/12345-6789/@ba/BusinessAdapter').respond 200, businessAdapter("1234","Title")
-
-
       session.getDocument("12345-6789").getAdapter("BusinessAdapter").then (ba)->
-        expect(ba.title).toBe "Title"
+        expect(ba.value.title).toBe "Title"
         resolved = true
 
       $httpBackend.flush 1
 
 
     it "should be able to save a document adapter", ()->
-      $httpBackend.expectGET(apiRootPath + '/id/12345-6789/@ba/BusinessAdapter').respond 200, businessAdapter("12345-6789","Title")
       modifiedBA = businessAdapter("12345-6789","New Title")
-      $httpBackend.expectPOST(apiRootPath + '/id/12345-6789/@ba/BusinessAdapter', modifiedBA).respond 200, modifiedBA
+      $httpBackend.expectPOST(apiRootPath + '/id/12345-6789/@bo/BusinessAdapter', modifiedBA).respond 200, modifiedBA
     
       session.getDocument("12345-6789").getAdapter("BusinessAdapter").then (ba)->
-        ba.title = "New Title"
+        ba.value.title = "New Title"
 
         ba.save().then (newBa)->
-          expect(newBa.title).toBe "New Title"
+          expect(newBa.value.title).toBe "New Title"
           resolved = true
 
       $httpBackend.flush 2
@@ -196,7 +195,7 @@ describe "Service: nxSession >", ->
       changeToken: "1373638752185"
       contextParameters: {}
     result
-
+ 
   jsDocuments = (docs...)->
     result = 
       "entity-type": "documents"
@@ -207,9 +206,10 @@ describe "Service: nxSession >", ->
     title = if title? then title else "default-domain"
     result = 
       "entity-type": "BusinessAdapter"
-      type: "Domain"
-      title: title
-      id: uid
+      value:
+        type: "Domain"
+        title: title
+        id: uid
     result
 
     
