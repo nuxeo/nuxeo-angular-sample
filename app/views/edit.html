@@ -1,0 +1,40 @@
+<form name="docEditForm">
+  <fieldset>
+    <legend ng-hide="document.uid">Create a document</legend>
+    <legend ng-show="document.uid">Edit the document</legend>
+    
+
+    <div ng-hide="document.uid" class="form-group">
+      <label for="doctype">Document type</label>
+      <select required class="form-control" ng-model="document.type">
+        <option value="Folder">Folder</option>
+        <option value="Workspace">Workspace</option>
+        <option value="File">File</option>
+        <option value="Note">Note</option>
+
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input type="text" class="form-control" required id="title" ng-model="document.properties['dc:title']">
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea class="form-control" ng-model="document.properties['dc:description']" rows="3"/>
+    </div>
+
+    <div ng-show="document.type == 'File'" class="form-group">
+      <label for="description">File</label>
+      <input type="upload"/>
+    </div>
+
+    <div ng-show="document.type == 'Note'" class="form-group">
+      <label for="description">Note</label>
+      <textarea class="form-control" ng-model="document.properties['note:note']" rows="15"/>
+    </div>
+
+    <button type="submit" class="btn btn-primary" ng-disabled="isClean() || docEditForm.$invalid" ng-click="save()">Save</button>
+    <button type="submit" class="btn btn-warning" ng-click="cancel()">Cancel</button>      
+    <button ng-show="document.uid" type="submit" class="btn btn-danger" ng-click="destroy()">Delete</button>
+  </fieldset>
+</form>

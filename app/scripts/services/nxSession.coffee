@@ -1,10 +1,10 @@
 angular.module('nxSession',['ng'])
-
-
 .factory "nxSessionFactory", ['$http','$q',($http,$q) ->
-  nxSessionFactory = (apiRootPath) ->
-    
-    apiRootPath = apiRootPath
+  nxSessionFactory = (options) ->
+    options = options || {}
+
+    apiRootPath = options.apiRootPath
+    defaultSchemas = options.defaultSchemas
     Session = {}
 
 
@@ -23,7 +23,6 @@ angular.module('nxSession',['ng'])
           #TODO Add deserialization and encapsulation based on expected resultType
           response.data
 
-
     class nxAdapter
       constructor: (json)->
         angular.extend this,json
@@ -40,12 +39,31 @@ angular.module('nxSession',['ng'])
         if jsonDoc? then angular.extend @,jsonDoc
         @pathOrId = pathOrId
 
-      fetch: ()->
+      fetch: (schemas)->
+        schemas = ( schemas || [])
         self = @
-        $http.get(apiRootPath + @getResourceUrl()).then (response)->
-          angular.extend self, response.data
+        promise = $http.get(apiRootPath + @getResourceUrl(),
+            headers: 
+              "X-NXDocumentProperties": schemas.join(",")
+        )
+        @$resolved = false;
+
+        markResolved = ()-> @$resolved = true
+        promise.then(markResolved,markResolved)
+
+        self.$then = promise.then((response)->
+          thhen = self.$then
+          resolved = self.$resolved
+
+          #angular.extend self, response.data
+          angular.copy(response.data, self);
+          self.$then = thhen
+          self.$resolved = resolved
           delete self.pathOrId
           self
+        ).then
+        
+        self
 
       _getPathOrId: ()->
         if @uid? then @uid else @pathOrId
@@ -57,13 +75,22 @@ angular.module('nxSession',['ng'])
         else
           "/id/" + @pathOrId            
 
-      getChildren: ()->
-        $http.get(apiRootPath + @getResourceUrl() + "/@children").then (response)->
+      getChildren: (schemas)->
+        schemas = ( schemas || [])
+
+        $http.get(apiRootPath + @getResourceUrl() + "/@children"
+          headers: 
+              "X-NXDocumentProperties": schemas.join(",")
+        ).then (response)->
           docs = response.data
           if(angular.isArray(docs.entries))
-            docs.entries.map( (jsonDoc)-> new nxDocument(jsonDoc.uid, jsonDoc))
+            docs.entries = docs.entries.map( (jsonDoc)-> new nxDocument(jsonDoc.uid, jsonDoc))
+            docs
           else
             $q.reject("Response was not a collection")
+
+      isFolderish: ()->      
+        if angular.isDefined(@facets) then @facets.indexOf("Folderish") != -1 else false
 
       save: ()->
         $http.put(apiRootPath + "/id/" + @uid , @).then (response)->
@@ -97,8 +124,9 @@ angular.module('nxSession',['ng'])
     Session.getDocument = (pathOrId)->
       new nxDocument(pathOrId)
 
-    Session.createDocument = (parentPath, name, type)->
-      $http.post(apiRootPath + "/path" + parentPath, {type: type, name: name}).then (response)->
+    Session.createDocument = (parentPath,  doc)->
+      doc['entity-type']  = "document"
+      $http.post(apiRootPath + "/path" + parentPath , doc).then (response)->
         new nxDocument(response.data.uid, response.data)
   
     Session

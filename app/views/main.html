@@ -1,15 +1,24 @@
-<section ng-show="document.type != 'Root'">
-  <div class="page-header">
-    <h2>{{document.title}}</h2>
+<h2>{{document.title}}</h2>
+
+
+<div class="row">
+  <div class="col-lg-2"><label>Description</label>
   </div>
-
-
-</section>
-
-<section>
-  <div class="page-header">
-    <h4>Content</h4>
+  <div class="col-lg-10">
+    {{document.properties['dc:description']}}
   </div>
+</div>
+
+<div class="row" ng-show="document.type == 'Note'">
+  <div class="col-lg-2"><label>Note</label>
+  </div>
+  <div class="col-lg-10">
+    {{document.properties['note:note']}}
+  </div>
+</div>
+
+<div ng-show="document.isFolderish()">
+  <h3>Content</h3>
   <table class="table table-bordered table-condensed">
     <thead>
       <tr>
@@ -22,18 +31,20 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="entry in children">
+      <tr ng-repeat="entry in children.entries">
         <td><input type="checkbox"/></td>
         <td><a ng-click="setPath(entry.path)">{{entry.title}}</td>
         <td>{{entry.lastModified | date:'yyyy-MM-dd'}}</td>
-        <td></td>
+        <td>{{entry.properties['dc:lastContributor']}}</td>
         <td>{{entry.versionLabel}}</td>
         <td>{{entry.state}}</td>
       </tr>
     </tbody>
-
-    
-
   </table>
+</div>
 
-</section>
+
+<a ng-show="document.isFolderish()" class="btn btn-default btn-small" ng-click="newDocument()"><i class="glyphicon glyphicon-plus-sign"></i> New document</a>
+<a class="btn btn-default btn-small" ng-click="editDocument()"><i class="glyphicon glyphicon-pencil"></i> Edit document</a>
+  
+  
