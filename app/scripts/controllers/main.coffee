@@ -39,7 +39,7 @@ angular.module("nuxeoAngularSampleApp")
       nxNavigation.navigateTo(doc.path)
 
   $scope.cancel = ()->
-    nxNavigation.navigateTo(doc.path)    
+    nxNavigation.navigateTo($scope.document.path)    
 
   $scope.destroy = ()->
     if(confirm("Do you really want to delete this document ?")) 
