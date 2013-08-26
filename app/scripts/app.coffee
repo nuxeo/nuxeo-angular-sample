@@ -1,5 +1,5 @@
 "use strict"
-angular.module("nuxeoAngularSampleApp", ['nxSession','ui.bootstrap'])
+angular.module("nuxeoAngularSampleApp", ['nxSession','ui.bootstrap','blueimp.fileupload'])
 .value("nxUrl", "/nuxeo/site/api" )
 .factory("nxSession", ["nxSessionFactory","nxUrl",(nxSessionFactory,nxUrl)->
   nxSessionFactory(

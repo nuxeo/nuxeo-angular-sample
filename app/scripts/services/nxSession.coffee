@@ -92,8 +92,13 @@ angular.module('nxSession',['ng'])
       isFolderish: ()->      
         if angular.isDefined(@facets) then @facets.indexOf("Folderish") != -1 else false
 
-      save: ()->
-        $http.put(apiRootPath + "/id/" + @uid , @).then (response)->
+      save: (batchId)->
+
+        config = 
+            headers:
+              "X-Batch-Id":batchId
+
+        $http.put(apiRootPath + "/id/" + @uid , @, config).then (response)->
           new nxDocument(response.data.uid, response.data)
 
       delete: ()->
@@ -124,9 +129,16 @@ angular.module('nxSession',['ng'])
     Session.getDocument = (pathOrId)->
       new nxDocument(pathOrId)
 
-    Session.createDocument = (parentPath,  doc)->
+    Session.createDocument = (parentPath,  doc, batchId)->
       doc['entity-type']  = "document"
-      $http.post(apiRootPath + "/path" + parentPath , doc).then (response)->
+      config =
+          method: "POST"
+          url: apiRootPath + "/path" + parentPath 
+          data: doc
+          headers:
+            "X-Batch-Id":batchId
+
+      $http(config).then (response)->
         new nxDocument(response.data.uid, response.data)
   
     Session

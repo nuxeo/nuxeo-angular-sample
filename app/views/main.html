@@ -1,5 +1,6 @@
 <h2>{{document.title}}</h2>
-
+<a ng-show="document.isFolderish()" class="btn btn-default btn-small" ng-click="newDocument()"><i class="glyphicon glyphicon-plus-sign"></i> New document</a>
+<a class="btn btn-default btn-small" ng-click="editDocument()"><i class="glyphicon glyphicon-pencil"></i> Edit document</a>
 
 <div class="row">
   <div class="col-lg-2"><label>Description</label>
@@ -17,11 +18,20 @@
   </div>
 </div>
 
+<div class="row" ng-show="document.type == 'File'">
+  <div class="col-lg-2"><label>File</label>
+  </div>
+  <div class="col-lg-10">
+    <a ng-href="/nuxeo/site/automation/{{document.properties['file:content'].data}}">{{document.properties['file:filename']}}</a>
+  </div>
+</div>
+
 <div ng-show="document.isFolderish()">
   <h3>Content</h3>
   <table class="table table-bordered table-condensed">
     <thead>
       <tr>
+        <th><input type="checkbox" ng-click="selectAll()" ng-model="allSelected"/></th>
         <th>&nbsp;</th>
         <th>Title</th>
         <th>Modified</th>
@@ -32,7 +42,8 @@
     </thead>
     <tbody>
       <tr ng-repeat="entry in children.entries">
-        <td><input type="checkbox"/></td>
+        <td><input type="checkbox" ng-model="entry.checked"/></td>
+        <td align="center"><img ng-src="/nuxeo/{{entry.properties['common:icon']}}"/></td>
         <td><a ng-click="setPath(entry.path)">{{entry.title}}</td>
         <td>{{entry.lastModified | date:'yyyy-MM-dd'}}</td>
         <td>{{entry.properties['dc:lastContributor']}}</td>
@@ -41,10 +52,12 @@
       </tr>
     </tbody>
   </table>
+
+  <a class="btn btn-danger btn-small" ng-disabled="selectedDocs().length == 0" ng-click="deleteSelectedDocuments()"><i class="glyphicon glyphicon-pencil"></i> Delete documents</a>
+
 </div>
 
 
-<a ng-show="document.isFolderish()" class="btn btn-default btn-small" ng-click="newDocument()"><i class="glyphicon glyphicon-plus-sign"></i> New document</a>
-<a class="btn btn-default btn-small" ng-click="editDocument()"><i class="glyphicon glyphicon-pencil"></i> Edit document</a>
-  
+
+
   
