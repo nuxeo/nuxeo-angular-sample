@@ -31,10 +31,6 @@ module.exports = function (grunt) {
         files: ['test/spec/{,*/}*.coffee'],
         tasks: ['coffee:test']
       },
-      compass: {
-        files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-        tasks: ['compass']
-      },
       less: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.less'],
         tasks: ['less:server']
@@ -56,9 +52,9 @@ module.exports = function (grunt) {
         hostname: 'localhost'
       },
       proxies: [{
-              context: '/nuxeo',
-              host: 'localhost',
-              port: 8080
+        context: '/nuxeo',
+        host: 'localhost',
+        port: 8080
       }],
       livereload: {
         options: {
@@ -121,7 +117,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%= yeoman.app %>/scripts',
-          src: '{,*/}*.coffee',
+          src: '{,**/}*.coffee',
           dest: '.tmp/scripts',
           ext: '.js'
         }]
@@ -130,27 +126,10 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: 'test/spec',
-          src: '{,*/}*.coffee',
+          src: '{,**/}*.coffee',
           dest: '.tmp/spec',
           ext: '.js'
         }]
-      }
-    },
-    compass: {
-      options: {
-        sassDir: '<%= yeoman.app %>/styles',
-        cssDir: '.tmp/styles',
-        imagesDir: '<%= yeoman.app %>/images',
-        javascriptsDir: '<%= yeoman.app %>/scripts',
-        fontsDir: '<%= yeoman.app %>/styles/fonts',
-        importPath: '<%= yeoman.app %>/components',
-        relativeAssets: true
-      },
-      dist: {},
-      server: {
-        options: {
-          debugInfo: true
-        }
       }
     },
     less: {
@@ -161,7 +140,7 @@ module.exports = function (grunt) {
         },
         files: {
           '.tmp/styles/main.css': '<%= yeoman.app %>/styles/main.less'
-        }     
+        }
       },
       dist: {
         options: {
@@ -170,7 +149,7 @@ module.exports = function (grunt) {
         },
         files: {
           '.tmp/styles/main.css': '<%= yeoman.app %>/styles/main.less'
-        }     
+        }
       }
     },
     concat: {
@@ -298,7 +277,6 @@ module.exports = function (grunt) {
     'clean:server',
     'configureProxies',
     'coffee:dist',
-    'compass:server',
     'less:server',
     'livereload-start',
     'connect:livereload',
@@ -309,7 +287,6 @@ module.exports = function (grunt) {
   grunt.registerTask('test', [
     'clean:server',
     'coffee',
-    'compass',
     'connect:test',
     'karma'
   ]);
@@ -319,7 +296,6 @@ module.exports = function (grunt) {
     'jshint',
     'test',
     'coffee',
-    'compass:dist',
     'less:dist',
     'useminPrepare',
     'imagemin',
@@ -329,7 +305,7 @@ module.exports = function (grunt) {
     'copy',
     'cdnify',
     'ngmin',
-    'uglify',
+    //'uglify',
     'rev',
     'usemin'
   ]);

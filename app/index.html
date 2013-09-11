@@ -67,7 +67,7 @@
   </footer>
 
 
-    <!-- build:js scripts/scripts.js -->
+    <!-- build:js scripts/components.js -->
     <script src="components/jquery/jquery.js"></script>   
     <script src="components/angular-1.1.x/angular.js"></script>
     <script src="components/angular-1.1.x/angular-resource.js"></script>
@@ -110,14 +110,18 @@
     <script src="components/jquery-file-upload/js/jquery.fileupload-video.js"></script>
     <!-- The File Upload validation plugin -->
     <script src="components/jquery-file-upload/js/jquery.fileupload-validate.js"></script>
+    <!-- endbuild -->
 
 
-
+    <!-- build:js(.tmp) scripts/scripts.js -->    
     <script src="scripts/app.js"></script>
     <script src="scripts/controllers/main.js"></script>
     <script src="scripts/controllers/breadcrumb.js"></script>
-    <script src="scripts/services/nxSession.js"></script>
     <script src="scripts/services/nxNavigation.js"></script>
+    <!-- endbuild -->
+
+    <!-- build:js(.tmp) scripts/nuxeo-service.js -->    
+    <script src="scripts/services/nxSession.js"></script>    
     <!-- endbuild -->
     
   </body>

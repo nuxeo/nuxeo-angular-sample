@@ -15,7 +15,7 @@ describe "Service: nxSession >", ->
 
   beforeEach inject(($injector,nxSessionFactory) ->
     $httpBackend = $injector.get('$httpBackend')
-    session = nxSessionFactory(apiRootPath)
+    session = nxSessionFactory({'apiRootPath':apiRootPath})
     resolved = false;
     
   )
@@ -35,7 +35,7 @@ describe "Service: nxSession >", ->
       
 
       session.getDocument("/default-domain").fetch()
-      session.getDocument("/default-domain/workspaces").fetch().then (doc)->
+      session.getDocument("/default-domain/workspaces").fetch().$then (doc)->
         resolved = true
         expect(typeof doc).toBe "object"
       , (cause)->      
@@ -45,12 +45,13 @@ describe "Service: nxSession >", ->
       
     
 
+
     it "should retrieve a document by its id", ()->
       $httpBackend.expectGET(apiRootPath + '/id/12345-6789').respond 200, jsDocument()
       $httpBackend.expectGET(apiRootPath + '/id/67890').respond 200, jsDocument()
       
       session.getDocument("12345-6789").fetch()    
-      session.getDocument("67890").fetch().then (doc)->
+      session.getDocument("67890").fetch().$then (doc)->
         resolved = true
         expect(typeof doc).toBe "object"
 
@@ -62,8 +63,9 @@ describe "Service: nxSession >", ->
       
       session.getDocument("12345-6789").getChildren().then (children)->
         resolved = true
-        expect(children.length).toBe 2
-        doc = children[0]
+        expect(children.entries.length).toBe 2
+        
+        doc = children.entries[0]
         expect(doc.uid).toBe "12345"
       , (error)->
         console.log error
@@ -78,7 +80,7 @@ describe "Service: nxSession >", ->
 
       $httpBackend.expectGET(apiRootPath + '/id/12345-6789').respond 200, jsDocument("12345-6789")
       $httpBackend.expectPUT(apiRootPath + '/id/12345-6789', docModified ).respond 200, jsDocument("12345-6789")
-      session.getDocument("12345-6789").fetch().then (doc)->
+      session.getDocument("12345-6789").fetch().$then (doc)->
         doc.setPropertyValue("dc:title","New title")
         doc.save().then (doc)->
           expect(doc.uid).toBe "12345-6789"
@@ -90,13 +92,13 @@ describe "Service: nxSession >", ->
 
 
     it "should be able to create a document", ()->
-      expectedParams =         
+      myDoc =         
         type: "File"
         name: "myDoc"
 
-      $httpBackend.expectPOST(apiRootPath + '/path/folder', expectedParams).respond 201, jsDocument("12345-6789")
+      $httpBackend.expectPOST(apiRootPath + '/path/folder', myDoc).respond 201, jsDocument("12345-6789")
 
-      session.createDocument("/folder","myDoc","File").then (doc)->
+      session.createDocument("/folder",myDoc).then (doc)->
         expect(doc.uid).toBe "12345-6789"
         resolved = true
 
