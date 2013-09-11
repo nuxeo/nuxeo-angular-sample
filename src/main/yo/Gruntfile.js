@@ -13,7 +13,7 @@ module.exports = function (grunt) {
   // configurable paths
   var yeomanConfig = {
     app: 'app',
-    dist: 'dist'
+    dist: '../../../target/classes//web/nuxeo.war/angular-sample'
   };
 
   try {
@@ -264,7 +264,10 @@ module.exports = function (grunt) {
             '.htaccess',
             'components/**/*',
             'images/{,*/}*.{gif,webp}',
-            'styles/fonts/*'
+            'fonts/*',
+            'styles/fonts/*',
+            'index.html',
+            'views/*.html'
           ]
         }]
       }
@@ -300,7 +303,7 @@ module.exports = function (grunt) {
     'useminPrepare',
     'imagemin',
     'cssmin',
-    'htmlmin',
+    //'htmlmin',
     'concat',
     'copy',
     'cdnify',
