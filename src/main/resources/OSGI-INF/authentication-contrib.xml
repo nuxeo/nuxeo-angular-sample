@@ -1,4 +1,4 @@
-<component name="com.nuxeo.connect.authentication.contrib">
+<component name="org.nuxeo.angular.sample.authentication.contrib">
   <extension
       target="org.nuxeo.ecm.platform.ui.web.auth.service.PluggableAuthenticationService"
       point="startURL">
