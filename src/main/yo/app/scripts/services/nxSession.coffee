@@ -71,7 +71,7 @@ angular.module('nxSession',['ng'])
 
       getResourceUrl: ()->
         if @uid? then "/id/" + @uid else if(@_getPathOrId()[0] == "/")
-          "/path" + if @pathOrId == "/" then "" else @pathOrId
+          "/path" + if @pathOrId == "/" then "/" else @pathOrId
         else
           "/id/" + @pathOrId            
 
