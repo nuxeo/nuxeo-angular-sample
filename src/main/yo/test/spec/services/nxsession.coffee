@@ -1,7 +1,7 @@
 "use strict"
 describe "Service: nxSession >", ->
 
-  apiRootPath = "/nuxeo/site/api"
+  apiRootPath = "/nuxeo/api/v1"
 
   $httpBackend = undefined
   session = undefined
