@@ -17,6 +17,11 @@ In order to build, you have to :
 
       git clone http https://github.com/nuxeo/nuxeo-angular-sample
 
+ * install the necessary dependencies :
+
+      npm install
+      bower install
+
  * In the clone repository, launch :
 
       grunt server
