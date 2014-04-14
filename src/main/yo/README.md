@@ -15,7 +15,7 @@ In order to build, you have to :
 
  * clone this repository :
 
-      git clone http https://github.com/nuxeo/nuxeo-angular-sample
+      git clone https://github.com/nuxeo/nuxeo-angular-sample
 
  * install the necessary dependencies :
 
