@@ -20,6 +20,7 @@ In order to build, you have to :
  * install the necessary dependencies :
 
       npm install
+      
       bower install
 
  * In the clone repository, launch :
